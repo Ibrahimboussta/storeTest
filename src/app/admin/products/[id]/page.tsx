@@ -14,7 +14,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     .from('products')
     .select('*')
     .eq('id', id)
-    .single();
+    .single() as any;
 
   if (!product) {
     notFound();
@@ -31,7 +31,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
           Retour aux produits
         </Link>
         <h1 className="font-headline-lg text-3xl font-semibold">Modifier le Produit</h1>
-        <p className="text-on-surface-variant font-body-md">Mettez à jour les informations de {product.name}</p>
+        <p className="text-on-surface-variant font-body-md">Mettez à jour les informations de {(product as any).name}</p>
       </div>
 
       <ProductForm product={product} categories={categories} />

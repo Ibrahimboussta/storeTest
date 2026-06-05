@@ -25,7 +25,7 @@ export function Navbar() {
           .from('profiles')
           .select('role')
           .eq('id', session.user.id)
-          .single();
+          .single() as any;
         setRole(profile?.role || 'customer');
       }
     };
@@ -39,7 +39,7 @@ export function Navbar() {
           .from('profiles')
           .select('role')
           .eq('id', session.user.id)
-          .single();
+          .single() as any;
         setRole(profile?.role || 'customer');
       } else {
         setRole(null);

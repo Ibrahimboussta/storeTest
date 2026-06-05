@@ -1,6 +1,6 @@
 import { createClient } from './server';
 
-export async function getProducts() {
+export async function getProducts(): Promise<any[]> {
   const supabase = await createClient();
   const { data: products, error } = await supabase
     .from('products')
@@ -12,10 +12,10 @@ export async function getProducts() {
     return [];
   }
 
-  return products;
+  return (products || []) as any;
 }
 
-export async function getFeaturedProducts() {
+export async function getFeaturedProducts(): Promise<any[]> {
   const supabase = await createClient();
   const { data: products, error } = await supabase
     .from('products')
@@ -28,10 +28,10 @@ export async function getFeaturedProducts() {
     return [];
   }
 
-  return products;
+  return (products || []) as any;
 }
 
-export async function getProductBySlug(slug: string) {
+export async function getProductBySlug(slug: string): Promise<any> {
   const supabase = await createClient();
   const { data: product, error } = await supabase
     .from('products')
@@ -44,10 +44,10 @@ export async function getProductBySlug(slug: string) {
     return null;
   }
 
-  return product;
+  return product as any;
 }
 
-export async function getCategories() {
+export async function getCategories(): Promise<any[]> {
   const supabase = await createClient();
   const { data: categories, error } = await supabase
     .from('categories')
@@ -59,10 +59,10 @@ export async function getCategories() {
     return [];
   }
 
-  return categories;
+  return (categories || []) as any;
 }
 
-export async function getOrders() {
+export async function getOrders(): Promise<any[]> {
   const supabase = await createClient();
   const { data: orders, error } = await supabase
     .from('orders')
@@ -74,5 +74,5 @@ export async function getOrders() {
     return [];
   }
 
-  return orders;
+  return (orders || []) as any;
 }

@@ -87,7 +87,7 @@ export async function createOrder(orderData: any, cartItems: any[]) {
 
   if (productsError) return { error: "Erreur de vérification du stock" };
 
-  const soldOutItems = products?.filter(p => p.is_sold_out);
+  const soldOutItems = (products as any[])?.filter(p => (p as any).is_sold_out);
   if (soldOutItems && soldOutItems.length > 0) {
     return { error: `Désolé, les produits suivants sont en rupture de stock: ${soldOutItems.map(i => i.name).join(', ')}` };
   }
