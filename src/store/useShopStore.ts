@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { products } from '../data/mock';
+import { showToast } from './useToastStore';
 
 type Product = typeof products[0];
 
@@ -25,6 +26,19 @@ export const useShopStore = create<ShopState>()(
       wishlist: [],
       addToCart: (product, quantity = 1) =>
         set((state) => {
+          // Prevent adding sold-out products
+          if ((product as any).is_sold_out) {
+            // Use toast notification instead of alert
+            try {
+              showToast('Ce produit est en rupture de stock et ne peut pas être ajouté au panier.', 'error');
+            } catch (e) {
+              // fallback to alert if toast store isn't available
+              // eslint-disable-next-line no-alert
+              alert('Ce produit est en rupture de stock et ne peut pas être ajouté au panier.');
+            }
+            return { cart: state.cart };
+          }
+
           const existingItem = state.cart.find((item) => item.id === product.id);
           if (existingItem) {
             return {

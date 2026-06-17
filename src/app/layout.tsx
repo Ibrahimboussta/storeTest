@@ -3,6 +3,7 @@ import { Inter, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import Toasts from '@/components/ui/Toast';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,6 +32,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Navbar />
+        <Toasts />
         {children}
         <Footer />
       </body>

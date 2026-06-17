@@ -18,31 +18,39 @@ export function Navbar() {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single() as any;
-        setRole(profile?.role || 'customer');
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+          setRole((profile as any)?.role || 'customer');
+        }
+      } catch (err) {
+        console.error('Error fetching session:', err);
       }
     };
 
     fetchSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single() as any;
-        setRole(profile?.role || 'customer');
-      } else {
-        setRole(null);
+      try {
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+          setRole((profile as any)?.role || 'customer');
+        } else {
+          setRole(null);
+        }
+      } catch (err) {
+        console.error('Error on auth state change:', err);
       }
     });
 

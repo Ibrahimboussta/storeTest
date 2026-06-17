@@ -14,21 +14,21 @@ export interface Database {
           id: string
           full_name: string | null
           avatar_url: string | null
-          role: 'customer' | 'admin'
+          role: string
           updated_at: string
         }
         Insert: {
           id: string
           full_name?: string | null
           avatar_url?: string | null
-          role?: 'customer' | 'admin'
+          role?: string
           updated_at?: string
         }
         Update: {
           id?: string
           full_name?: string | null
           avatar_url?: string | null
-          role?: 'customer' | 'admin'
+          role?: string
           updated_at?: string
         }
       }
@@ -67,6 +67,7 @@ export interface Database {
           nutrition: Json | null
           stock_quantity: number
           is_featured: boolean
+          is_sold_out: boolean
           created_at: string
         }
         Insert: {
@@ -83,6 +84,7 @@ export interface Database {
           nutrition?: Json | null
           stock_quantity?: number
           is_featured?: boolean
+          is_sold_out?: boolean
           created_at?: string
         }
         Update: {
@@ -99,6 +101,7 @@ export interface Database {
           nutrition?: Json | null
           stock_quantity?: number
           is_featured?: boolean
+          is_sold_out?: boolean
           created_at?: string
         }
       }
@@ -106,7 +109,7 @@ export interface Database {
         Row: {
           id: string
           user_id: string | null
-          status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          status: string
           total_amount: number
           shipping_address: Json | null
           created_at: string
@@ -114,7 +117,7 @@ export interface Database {
         Insert: {
           id?: string
           user_id?: string | null
-          status?: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          status?: string
           total_amount: number
           shipping_address?: Json | null
           created_at?: string
@@ -122,7 +125,7 @@ export interface Database {
         Update: {
           id?: string
           user_id?: string | null
-          status?: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+          status?: string
           total_amount?: number
           shipping_address?: Json | null
           created_at?: string

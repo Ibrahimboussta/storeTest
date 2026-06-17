@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 export async function login(formData: FormData) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
@@ -23,7 +23,7 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const fullName = formData.get('fullName') as string;
@@ -47,20 +47,20 @@ export async function signup(formData: FormData) {
 }
 
 export async function signOut() {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   await supabase.auth.signOut();
   revalidatePath('/', 'layout');
   redirect('/');
 }
 
 export async function getSession() {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
   return session;
 }
 
 export async function getUserProfile() {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
   if (!user) return null;
@@ -75,7 +75,7 @@ export async function getUserProfile() {
 }
 
 export async function createOrder(orderData: any, cartItems: any[]) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
   // 1. Verify availability of all products
@@ -87,9 +87,9 @@ export async function createOrder(orderData: any, cartItems: any[]) {
 
   if (productsError) return { error: "Erreur de vérification du stock" };
 
-  const soldOutItems = (products as any[])?.filter(p => (p as any).is_sold_out);
+  const soldOutItems = products?.filter((p: any) => p.is_sold_out);
   if (soldOutItems && soldOutItems.length > 0) {
-    return { error: `Désolé, les produits suivants sont en rupture de stock: ${soldOutItems.map(i => i.name).join(', ')}` };
+    return { error: `Désolé, les produits suivants sont en rupture de stock: ${soldOutItems.map((i: any) => i.name).join(', ')}` };
   }
 
   const { data: order, error: orderError } = await supabase
@@ -157,7 +157,7 @@ export async function createOrder(orderData: any, cartItems: any[]) {
 }
 
 export async function updateUserProfile(formData: FormData) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const fullName = formData.get('fullName') as string;
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -177,7 +177,7 @@ export async function updateUserProfile(formData: FormData) {
 }
 
 export async function deleteProduct(productId: string) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const { error } = await supabase
     .from('products')
     .delete()
@@ -197,7 +197,7 @@ export async function getLatestOrders() {
 }
 
 export async function updateOrderStatus(orderId: string, status: string) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   
   // Fetch order details to get the phone number for Google Sheets sync
   const { data: orderDetails } = await supabase
@@ -248,7 +248,7 @@ export async function updateOrderStatus(orderId: string, status: string) {
 }
 
 export async function saveProduct(productData: any, productId?: string) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   
   let result;
   if (productId) {
@@ -264,7 +264,7 @@ export async function saveProduct(productData: any, productId?: string) {
 }
 
 export async function bulkImportProducts(products: any[]) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const { error } = await supabase.from('products').insert(products);
   
   if (error) return { success: false, error: error.message };
@@ -274,7 +274,7 @@ export async function bulkImportProducts(products: any[]) {
 }
 
 export async function bulkDeleteProducts(productIds: string[]) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   const { error } = await supabase.from('products').delete().in('id', productIds);
   
   if (error) return { success: false, error: error.message };
@@ -284,7 +284,7 @@ export async function bulkDeleteProducts(productIds: string[]) {
 }
 
 export async function updateStock(updates: { id: string, stock_quantity: number }[]) {
-  const supabase = await createClient();
+  const supabase: any = await createClient();
   
   // Perform updates in parallel
   const results = await Promise.all(
