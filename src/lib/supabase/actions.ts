@@ -9,7 +9,7 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -18,8 +18,19 @@ export async function login(formData: FormData) {
     return { error: error.message };
   }
 
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', data.user.id)
+    .single();
+
   revalidatePath('/', 'layout');
-  redirect('/');
+  
+  if (profile?.role === 'admin') {
+    redirect('/admin');
+  } else {
+    redirect('/');
+  }
 }
 
 export async function signup(formData: FormData) {

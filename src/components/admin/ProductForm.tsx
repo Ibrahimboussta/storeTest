@@ -5,11 +5,42 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Loader2, Upload, X } from 'lucide-react';
 import { saveProduct } from '@/lib/supabase/actions';
+import dynamic from 'next/dynamic';
+import 'react-quill-new/dist/quill.snow.css';
+
+const ReactQuill = dynamic(async () => {
+  const RQ = await import('react-quill-new');
+  const QuillResizeImage = await import('quill-resize-image');
+  
+  const Quill = RQ.default.Quill || (RQ as any).Quill;
+  if (Quill && !Quill.imports['modules/resize']) {
+    Quill.register('modules/resize', QuillResizeImage.default || QuillResizeImage);
+  }
+  
+  return RQ.default;
+}, { 
+  ssr: false,
+  loading: () => <div className="h-64 bg-surface-container-low rounded-2xl animate-pulse border border-outline/10"></div>
+});
+
+const quillModules = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{'list': 'ordered'}, {'list': 'bullet'}],
+    ['link', 'image', 'video'],
+    ['clean']
+  ],
+  resize: {
+    locale: {}
+  }
+};
 
 export default function AdminProductForm({ product, categories }: { product?: any, categories: any[] }) {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>(product?.images || (product?.image_url ? [product.image_url] : []));
+  const [description, setDescription] = useState(product?.description || '');
   const supabase = createClient();
   const router = useRouter();
 
@@ -38,8 +69,6 @@ export default function AdminProductForm({ product, categories }: { product?: an
       const name = formData.get('name') as string;
       const price = parseFloat(formData.get('price') as string);
       const description = formData.get('description') as string;
-      const category_id = formData.get('category_id') as string;
-      const badge = formData.get('badge') as string;
       const stock_quantity = parseInt(formData.get('stock_quantity') as string) || 0;
       const old_price = formData.get('old_price') ? parseFloat(formData.get('old_price') as string) : null;
       const is_sold_out = formData.get('is_sold_out') === 'on';
@@ -66,8 +95,8 @@ export default function AdminProductForm({ product, categories }: { product?: an
         slug: name.toLowerCase().trim().replace(/\s+/g, '-'),
         price,
         description,
-        category_id: category_id || null,
-        badge,
+        category_id: null,
+        badge: '',
         image_url: finalImages[0] || '',
         images: finalImages,
         stock_quantity,
@@ -108,7 +137,7 @@ export default function AdminProductForm({ product, categories }: { product?: an
                 <input required name="name" defaultValue={product?.name} placeholder="ex: Sauce Truffe Noire" className="w-full h-14 px-6 rounded-2xl bg-surface-container-low border border-outline/10 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-on-surface font-medium placeholder:opacity-30" />
               </div>
 
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="font-label-md text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 ml-1">Prix Actuel (DH)</label>
                   <div className="relative">
@@ -123,15 +152,21 @@ export default function AdminProductForm({ product, categories }: { product?: an
                     <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-bold text-on-surface-variant opacity-40 text-error/40">DH</span>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="font-label-md text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 ml-1">Badge</label>
-                  <input name="badge" defaultValue={product?.badge} placeholder="Nouveau, Bio..." className="w-full h-14 px-6 rounded-2xl bg-surface-container-low border border-outline/10 focus:outline-none focus:border-primary transition-all" />
-                </div>
               </div>
 
               <div className="space-y-2">
                 <label className="font-label-md text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 ml-1">Description</label>
-                <textarea name="description" rows={5} defaultValue={product?.description} placeholder="Décrivez l'excellence de ce produit..." className="w-full p-6 rounded-2xl bg-surface-container-low border border-outline/10 focus:outline-none focus:border-primary transition-all resize-none font-body-md"></textarea>
+                <input type="hidden" name="description" value={description} />
+                <div className="bg-white rounded-2xl overflow-hidden border border-outline/10 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/5 transition-all">
+                  <ReactQuill 
+                    theme="snow" 
+                    value={description} 
+                    onChange={setDescription} 
+                    modules={quillModules}
+                    className="h-64 mb-12"
+                    placeholder="Décrivez l'excellence de ce produit..."
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -142,15 +177,7 @@ export default function AdminProductForm({ product, categories }: { product?: an
               Inventaire & Catégorie
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <label className="font-label-md text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 ml-1">Catégorie</label>
-                <select name="category_id" defaultValue={product?.category_id} className="w-full h-14 px-6 rounded-2xl bg-surface-container-low border border-outline/10 focus:outline-none focus:border-primary transition-all appearance-none cursor-pointer">
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                  ))}
-                </select>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="font-label-md text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 ml-1">Quantité en Stock</label>
                 <input required name="stock_quantity" type="number" defaultValue={product?.stock_quantity || 100} className="w-full h-14 px-6 rounded-2xl bg-surface-container-low border border-outline/10 focus:outline-none focus:border-primary transition-all font-bold" />

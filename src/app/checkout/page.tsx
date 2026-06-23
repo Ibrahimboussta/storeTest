@@ -114,7 +114,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="md:col-span-2 space-y-2">
                     <label className="font-label-md text-xs uppercase tracking-widest text-on-surface-variant">Numéro de téléphone</label>
-                    <input required name="phone" type="tel" className="w-full h-14 px-6 rounded-xl bg-surface-container-low border border-outline/10 focus:outline-none focus:border-primary transition-all" />
+                    <input required name="phone" type="tel" pattern="[0-9]{10}" maxLength={10} title="Veuillez entrer un numéro à 10 chiffres exacts" className="w-full h-14 px-6 rounded-xl bg-surface-container-low border border-outline/10 focus:outline-none focus:border-primary transition-all" />
                   </div>
                   <div className="md:col-span-2 space-y-2">
                     <label className="font-label-md text-xs uppercase tracking-widest text-on-surface-variant">Adresse</label>

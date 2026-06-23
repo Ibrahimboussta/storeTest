@@ -95,7 +95,7 @@ export function Navbar() {
           {(role === 'admin' || user?.email === 'admin@panel.com') && (
             <button 
               onClick={() => router.push('/admin')}
-              className="hover:opacity-70 transition-opacity duration-300 text-primary"
+              className="hover:opacity-70 transition-opacity duration-300 text-primary cursor-pointer"
             >
               <User className="w-6 h-6" />
             </button>
