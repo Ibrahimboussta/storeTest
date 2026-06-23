@@ -12,12 +12,12 @@ export default async function AdminProductsPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="font-headline-lg text-3xl font-semibold">Produits</h1>
           <p className="text-on-surface-variant font-body-md">Gérez votre catalogue de sauces gastronomiques</p>
         </div>
-        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <ProductImport categories={categories} />
           <Link 
             href="/admin/products/new"

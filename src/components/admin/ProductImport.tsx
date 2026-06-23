@@ -130,13 +130,13 @@ export default function ProductImport({ categories }: ProductImportProps) {
         <button
           type="button"
           onClick={() => setMenuOpen((prev) => !prev)}
-          className="flex items-center justify-center gap-2 bg-surface-container text-on-surface-variant px-4 py-2 rounded-full font-label-md text-[11px] uppercase tracking-[0.25em] hover:bg-surface-container-hover transition-all"
+          className="flex items-center justify-center bg-surface-container text-on-surface-variant p-3 rounded-full font-label-md text-[11px] uppercase tracking-[0.25em] hover:bg-surface-container-hover transition-all"
+          aria-label="Actions"
         >
-          <Menu className="w-4 h-4" />
-          Actions
+          <Menu className="w-5 h-5" />
         </button>
         {menuOpen && (
-          <div className="absolute right-0 z-50 mt-2 min-w-[220px] rounded-3xl border border-outline/10 bg-white p-3 shadow-lg">
+          <div className="absolute left-0 top-full z-50 mt-2 w-[240px] rounded-3xl border border-outline/10 bg-white p-3 shadow-lg">
             <button
               type="button"
               onClick={() => {

@@ -130,20 +130,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </main>
 
       {/* Mobile bottom navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-outline/5 flex lg:hidden z-30">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-outline/10 flex lg:hidden z-30 shadow-lg shadow-black/5">
         {sidebarLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
             <Link
               key={link.href}
               href={link.href}
-              className={`flex-1 flex flex-col items-center justify-center py-3 gap-1 transition-colors ${
-                isActive ? 'text-primary' : 'text-on-surface-variant'
+              className={`flex-1 flex flex-col items-center justify-center py-4 px-2 gap-1.5 transition-all duration-200 border-t-2 ${
+                isActive 
+                  ? 'text-primary border-t-primary bg-primary/5' 
+                  : 'text-on-surface-variant border-t-transparent hover:bg-surface-container-low hover:text-primary'
               }`}
             >
-              <link.icon className="w-5 h-5" />
-              <span className="font-label-md text-[9px] uppercase tracking-wider">{link.label}</span>
-              {isActive && <div className="w-1 h-1 rounded-full bg-primary" />}
+              <link.icon className={`w-6 h-6 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`} />
+              <span className="font-label-md text-[10px] uppercase tracking-wider text-center">{link.label}</span>
             </Link>
           );
         })}

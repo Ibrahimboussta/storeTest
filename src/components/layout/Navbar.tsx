@@ -1,6 +1,6 @@
 'use client';
 
-import { ShoppingCart, User, LogOut } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Menu, X } from 'lucide-react';
 import { useShopStore } from '@/store/useShopStore';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -17,6 +17,7 @@ export function Navbar() {
   const router = useRouter();
 
   const isAdmin = role === 'admin' || user?.email === 'admin@panel.com';
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -104,8 +105,43 @@ export function Navbar() {
               <span className="sr-only">Admin</span>
             </button>
           )}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-surface-container text-primary hover:bg-surface-container-hover transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-surface border-t border-outline/10">
+          <div className="max-w-[1280px] mx-auto px-5 md:px-16 py-4 flex flex-col gap-3">
+            <Link
+              href="/products"
+              onClick={() => setMobileMenuOpen(false)}
+              className="font-label-md text-sm uppercase tracking-widest text-primary hover:text-secondary transition-colors"
+            >
+              Produits
+            </Link>
+            <Link
+              href="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="font-label-md text-sm uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+            >
+              Notre Histoire
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="font-label-md text-sm uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
