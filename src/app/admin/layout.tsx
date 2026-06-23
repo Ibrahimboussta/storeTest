@@ -26,7 +26,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const currentLabel = sidebarLinks.find(l => l.href === pathname)?.label || 'Paramètres';
+  const currentLink = sidebarLinks.find(l => l.href === pathname) || sidebarLinks[0];
+  const currentLabel = currentLink.label;
+  const CurrentIcon = currentLink.icon;
 
   return (
     <div className="flex min-h-screen bg-surface-container-lowest">
@@ -103,9 +105,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             >
               <Menu className="w-5 h-5" />
             </button>
-            <h2 className="font-headline-md text-lg md:text-xl font-semibold capitalize">
-              {currentLabel}
-            </h2>
+            <div className="flex items-center gap-3">
+              <CurrentIcon className="w-5 h-5 text-primary lg:hidden" />
+              <h2 className="font-headline-md text-lg md:text-xl font-semibold capitalize">
+                {currentLabel}
+              </h2>
+            </div>
           </div>
           <div className="flex items-center gap-3 md:gap-6">
             <div className="text-right hidden sm:block">

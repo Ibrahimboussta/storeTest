@@ -16,6 +16,8 @@ export function Navbar() {
   const supabase = createClient();
   const router = useRouter();
 
+  const isAdmin = role === 'admin' || user?.email === 'admin@panel.com';
+
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -92,12 +94,14 @@ export function Navbar() {
               </span>
             )}
           </Link>
-          {(role === 'admin' || user?.email === 'admin@panel.com') && (
+          {isAdmin && (
             <button 
               onClick={() => router.push('/admin')}
-              className="hover:opacity-70 transition-opacity duration-300 text-primary cursor-pointer"
+              className="relative hover:opacity-70 transition-opacity duration-300 text-primary cursor-pointer"
+              aria-label="Admin dashboard"
             >
               <User className="w-6 h-6" />
+              <span className="sr-only">Admin</span>
             </button>
           )}
         </div>

@@ -99,7 +99,7 @@ export default function ProductsTable({ products }: ProductsTableProps) {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-surface-container-low font-label-md text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60">
-                <th className="px-6 py-6 w-10">
+                <th className="px-4 py-4 w-10 md:px-6 md:py-6">
                   <input 
                     type="checkbox" 
                     checked={selectedIds.length === products.length && products.length > 0}
@@ -107,11 +107,11 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                     className="w-5 h-5 rounded border-outline/20 accent-primary cursor-pointer"
                   />
                 </th>
-                <th className="px-6 py-6">Produit</th>
-                <th className="px-6 py-6">Catégorie</th>
-                <th className="px-6 py-6">Prix</th>
-                <th className="px-6 py-6">Stock</th>
-                <th className="px-10 py-6 text-right">Actions</th>
+                <th className="px-4 py-4 md:px-6 md:py-6">Produit</th>
+                <th className="px-4 py-4 md:px-6 md:py-6">Catégorie</th>
+                <th className="px-4 py-4 md:px-6 md:py-6">Prix</th>
+                <th className="px-4 py-4 md:px-6 md:py-6">Stock</th>
+                <th className="px-6 py-4 md:px-10 md:py-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline/5">
@@ -132,8 +132,8 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                         className="w-5 h-5 rounded border-outline/20 accent-primary cursor-pointer"
                       />
                     </td>
-                    <td className="px-6 py-6">
-                      <div className="flex items-center gap-4">
+                    <td className="px-4 py-4 md:px-6 md:py-6">
+                      <div className="flex items-center gap-3 md:gap-4">
                         <div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden shrink-0 flex items-center justify-center text-on-surface-variant/20 border border-outline/5">
                           {product.image_url ? (
                             <AdminImage src={product.image_url} alt={product.name} />
@@ -147,20 +147,20 @@ export default function ProductsTable({ products }: ProductsTableProps) {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-6">
+                    <td className="px-4 py-4 md:px-6 md:py-6">
                       <span className="px-3 py-1 bg-surface-container rounded-full text-[10px] font-label-md uppercase tracking-wider">
                         {(product.categories as any)?.name || 'N/A'}
                       </span>
                     </td>
-                    <td className="px-6 py-6 font-headline-md text-sm font-semibold">
+                    <td className="px-4 py-4 md:px-6 md:py-6 font-headline-md text-sm font-semibold">
                       {product.price.toFixed(2)} DH
                     </td>
-                    <td className="px-6 py-6">
+                    <td className="px-4 py-4 md:px-6 md:py-6">
                       <span className={`font-body-md text-sm ${product.stock_quantity < 10 ? 'text-error font-bold' : 'text-on-surface-variant'}`}>
                         {product.stock_quantity}
                       </span>
                     </td>
-                    <td className="px-10 py-6">
+                    <td className="px-6 py-4 md:px-10 md:py-6">
                       <div className="flex justify-end gap-2">
                         <Link href={`/products/${product.slug}`} target="_blank" className="p-2 hover:bg-primary/5 rounded-lg text-on-surface-variant hover:text-primary transition-colors">
                           <ExternalLink className="w-4 h-4" />
